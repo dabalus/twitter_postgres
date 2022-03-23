@@ -11,7 +11,7 @@ CREATE TABLE tweets_jsonb (
 );
 
 --------------------------------------------------------------------------------    
--- the views below represent normalized tables
+---- the views below represent normalized tables
 --------------------------------------------------------------------------------    
 
 CREATE VIEW tweets AS (
@@ -21,7 +21,7 @@ CREATE VIEW tweets AS (
         (data->>'created_at') :: TIMESTAMPTZ AS created_at,
         data->>'in_reply_to_status_id' AS in_reply_to_status_id,
         data->>'in_reply_to_user_id' AS in_reply_to_user_id,
-        data->>'quoted_status_id' AS quoted_status_id,
+       data->>'quoted_status_id' AS quoted_status_id,
         'FIXME' AS geo_coords, -- these "FIXME" columns involve complex python processing; they could be implemented in pure SQL, but it'd be a pain
         'FIXME' AS geo_string,
         data->>'retweet_count' AS retweet_count,
