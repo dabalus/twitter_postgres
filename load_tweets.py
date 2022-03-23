@@ -131,7 +131,7 @@ def insert_tweet(connection,tweet):
             ON CONFLICT DO NOTHING
             RETURNING id_users
                 ''')
-             else:
+        else:
             sql=sqlalchemy.sql.text('''
             UPDATE users
             SET created_at = :created_at,
@@ -259,17 +259,13 @@ def insert_tweet(connection,tweet):
             id_urls = get_id_urls(url['expanded_url'], connection)
 
             sql=sqlalchemy.sql.text('''
-            INSERT INTO tweet_urls
-                (id_tweets, id_urls)
-                VALUES
-                (:id_tweets, :id_urls)
-                ON CONFLICT DO
-                NOTHING
+            INSERT INTO tweet_urls (id_tweets, id_urls)
+            VALUES (:id_tweets, :id_urls)
                 ''')
-             res = connection.execute(sql, {
-                'id_tweets':tweet['id'],
-                'id_urls':id_urls,
-                })
+            res = connection.execute(sql, {
+                'id_tweets': tweet['id'],
+                'id_urls': id_urls,
+            })
 
         ########################################
         # insert into the tweet_mentions table
@@ -289,32 +285,29 @@ def insert_tweet(connection,tweet):
             # HINT:
             # use the ON CONFLICT DO NOTHING syntax
             sql=sqlalchemy.sql.text('''
-             INSERT INTO users
+                INSERT INTO users
                 (id_users, screen_name, name)
-                VALUES
-                (:id_users, :screen_name, :name)
-                ON CONFLICT DO
-                NOTHING
+                VALUES (:id_users, :screen_name, :name)
+                ON CONFLICT DO NOTHING
                 ''')
-             res = connection.execute(sql, {
-                'id_users':mention['id'],
-                'screen_name':mention['screen_name'],
-                'name':mention['name']
-                })
+            res = connection.execute(sql, {
+                    'id_users': mention['id'],
+                    'screen_name': mention['screen_name'],
+                    'name': mention['name']
+                }) 
 
 
             # insert into tweet_mentions
             sql=sqlalchemy.sql.text('''
-            INSERT INTO tweet_mentions
+                INSERT INTO tweet_mentions
                 (id_tweets, id_users)
-                VALUES
-                (:id_tweets, :id_users)
-                ON CONFLICT DO
-                NOTHING
+                VALUES (:id_tweets, :id_users)
+                ON CONFLICT DO NOTHING
                 ''')
-              res = connection.execute(sql, {
-                'id_tweets':tweet['id'],
-                'id_users':mention['id']
+
+            res = connection.execute(sql, {
+                'id_tweets': tweet['id'],
+                'id_users': mention['id'],
                 })
 
         ########################################
